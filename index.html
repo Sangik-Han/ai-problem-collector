@@ -47,7 +47,7 @@
         const resultContainer = document.getElementById('result-container');
         const promptTextarea = document.getElementById('generated-prompt');
         const copyBtn = document.getElementById('copy-button');
-        const SERVER_ENDPOINT = 'http://ec2-3-35-216-5.ap-northeast-2.compute.amazonaws.com:5000/api/collect'; 
+        const SERVER_ENDPOINT = 'https://6071aecae3a9.ngrok-free.app/api/collect'; 
 
         consentCheckbox.addEventListener('change', () => { generateBtn.disabled = !consentCheckbox.checked; });
 
