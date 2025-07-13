@@ -1,0 +1,86 @@
+<!-- prompt_generator.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI용 프롬프트 자동 생성기</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 20px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 800px; margin: 20px auto; padding: 30px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        p.description { text-align: center; color: #555; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
+        input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        textarea { height: 120px; resize: vertical; }
+        .consent { font-size: 14px; color: #7f8c8d; display: flex; align-items: center; }
+        .consent input { margin-right: 8px; }
+        .main-button { display: block; width: 100%; padding: 15px; background-color: #1abc9c; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; transition: background-color 0.3s; }
+        .main-button:disabled { background-color: #a4a4a4; cursor: not-allowed; }
+        #result-container { display: none; margin-top: 30px; }
+        #generated-prompt { width: 100%; height: 250px; font-size: 15px; line-height: 1.6; background-color: #ecf0f1; }
+        #copy-button { display: inline-block; width: auto; padding: 10px 20px; margin-top: 10px; background-color: #3498db; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s; }
+        #copy-button:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI 업무 비서 프롬프트 생성기</h1>
+        <p class="description">담당 직무와 해결하고 싶은 문제를 입력하시면, ChatGPT나 Gemini에서 최상의 답변을 얻을 수 있는<br>맞춤형 프롬프트를 자동으로 만들어 드립니다.</p>
+        <div class="form-group"><label for="job-title">1. 담당 직무</label><input type="text" id="job-title" placeholder="소속 부서와 주요 역할을 입력하세요"></div>
+        <div class="form-group"><label for="problem-description">2. 해결하고 싶은 문제점</label><textarea id="problem-description" placeholder="구체적인 상황, 어려움, 원하는 결과 등을 상세히 작성해주세요"></textarea></div>
+        <div class="form-group consent"><input type="checkbox" id="data-consent"><label for="data-consent">작성 내용은 익명으로 교육 및 연구 목적으로 수집 및 활용될 수 있음에 동의합니다.</label></div>
+        <button id="generate-btn" class="main-button" disabled>프롬프트 생성하기</button>
+        <div id="result-container">
+            <h3>3. 생성된 프롬프트</h3>
+            <p>아래 프롬프트를 복사하여 ChatGPT, Gemini 등에 붙여넣어 보세요!</p>
+            <textarea id="generated-prompt" readonly></textarea>
+            <button id="copy-button">프롬프트 복사하기</button>
+        </div>
+    </div>
+    <script>
+        const jobTitleInput = document.getElementById('job-title');
+        const problemDescInput = document.getElementById('problem-description');
+        const consentCheckbox = document.getElementById('data-consent');
+        const generateBtn = document.getElementById('generate-btn');
+        const resultContainer = document.getElementById('result-container');
+        const promptTextarea = document.getElementById('generated-prompt');
+        const copyBtn = document.getElementById('copy-button');
+        const SERVER_ENDPOINT = 'http://ec2-3-35-216-5.ap-northeast-2.compute.amazonaws.com:5000/api/collect'; 
+
+        consentCheckbox.addEventListener('change', () => { generateBtn.disabled = !consentCheckbox.checked; });
+
+        generateBtn.addEventListener('click', () => {
+            const jobTitle = jobTitleInput.value.trim();
+            const problemDescription = problemDescInput.value.trim();
+            if (!jobTitle || !problemDescription) { alert('직무와 문제점을 모두 입력해주세요.'); return; }
+            
+            const finalPrompt = createPrompt(jobTitle, problemDescription);
+            promptTextarea.value = finalPrompt;
+            resultContainer.style.display = 'block';
+            sendDataToServer(jobTitle, problemDescription);
+        });
+
+        copyBtn.addEventListener('click', () => {
+            promptTextarea.select();
+            document.execCommand('copy');
+            copyBtn.textContent = '복사 완료!';
+            setTimeout(() => { copyBtn.textContent = '프롬프트 복사하기'; }, 2000);
+        });
+
+        function createPrompt(job, problem) {
+            return `당신은 대한민국 정부의 업무 효율화를 전문으로 하는 최고의 AI 정책 컨설턴트입니다. 당신의 임무는 아래에 주어진 공무원의 직무와 당면 과제를 깊이 이해하고, 구체적이고 실현 가능한 해결 방안을 제시하는 것입니다.\n\n### 분석 대상 정보\n\n1.  **담당 직무:**\n    ${job}\n\n2.  **해결하고 싶은 문제점:**\n    ${problem}\n\n### 요청 사항\n\n위 정보를 바탕으로, 다음의 구조에 맞춰 체계적인 해결책을 제시해 주십시오.\n\n1.  **문제의 핵심 원인 진단 (1-2문장)**\n\n2.  **구체적인 해결 방안 (3가지 제안)**\n    - **해결 방안 1:** [방안의 명칭]\n      - **상세 설명:**\n      - **기대 효과:**\n      - **실행 단계:**\n    - **해결 방안 2:** [방안의 명칭]\n    - **해결 방안 3:** [방안의 명칭]\n\n3.  **각 해결 방안 실행 시 예상되는 어려움 및 극복 방안**\n\n4.  **종합 결론 및 제언**\n\n이제, 분석을 시작하고 최고의 컨설팅 보고서를 작성해주세요.`.trim();
+        }
+
+        async function sendDataToServer(job, problem) {
+            try {
+                await fetch(SERVER_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ job, problem }) });
+                console.log('데이터가 성공적으로 서버에 기록되었습니다.');
+            } catch (error) {
+                console.error('데이터 전송 중 오류가 발생했습니다:', error);
+            }
+        }
+    </script>
+</body>
+</html>

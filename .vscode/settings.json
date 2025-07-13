@@ -1,0 +1,95 @@
+{
+    // ────────── 에디터 ──────────
+    "workbench.colorTheme": "Monokai",
+    "editor.fontFamily": "Consolas, 'Courier New', monospace, Fira, Menlo, Monaco",
+    "editor.fontSize": 15,
+    "editor.fontVariations": false,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.inlineSuggest.enabled": true,
+    "editor.parameterHints.enabled": true,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": false
+    },
+    "editor.quickSuggestionsDelay": 10,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.suggest.localityBonus": true,
+    "editor.wordBasedSuggestions": "matchingDocuments",
+    "editor.acceptSuggestionOnCommitCharacter": true,
+    "editor.acceptSuggestionOnEnter": "on",
+
+    // ────────── Python venv ──────────
+    "python.terminal.activateEnvironment": true,
+    "python.defaultInterpreterPath": ".\\venv\\Scripts\\python.exe",
+    
+
+    // ────────── 터미널 ──────────
+    "terminal.integrated.fontSize": 20,
+    "terminal.integrated.inheritEnv": false,
+
+    // ────────── Git ──────────
+    "git.autofetch": true,
+
+    // ────────── 마크다운 ──────────
+    "markdown.preview.fontSize": 20,
+    "markdown.styles": [
+        "https://use.fontawesome.com/releases/v5.7.1/css/all.css",
+        "markdown-stype.css"
+    ],
+
+    // ────────── SCM ──────────
+    "scm.inputFontSize": 20,
+
+    // ────────── 워크벤치 & 보안 ──────────
+    "workbench.startupEditor": "none",
+    "security.workspace.trust.untrustedFiles": "open",
+
+    // ────────── 탐색기 ──────────
+    "explorer.confirmDelete": false,
+    "explorer.compactFolders": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmPasteNative": false,
+
+    // ────────── 파일 ──────────
+    "files.autoSave": "afterDelay",
+
+    // ────────── 브레드크럼 ──────────
+    "breadcrumbs.enabled": false,
+
+    // ────────── Jupyter ──────────
+    "jupyter.themeMatplotlibPlots": true,
+    "jupyter.askForKernelRestart": false,
+    "jupyter.widgetScriptSources": [
+        "jsdelivr.com",
+        "unpkg.com"
+    ],
+
+    // ────────── 노트북 ──────────
+    "notebook.output.wordWrap": true,
+    "notebook.formatOnSave.enabled": true,
+    "notebook.output.scrolling": true,
+    "notebook.lineNumbers": "on",
+
+    // ────────── CSS 린트 ──────────
+    "css.lint.emptyRules": "ignore",
+
+    // ────────── Python 인터프리터 ──────────
+    // 실제 python.exe 경로로 교체하세요.
+    "python.defaultInterpreterPath": "C:\\Python312\\python.exe",
+
+    // ────────── 언어별 (Python) ──────────
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnType": true,
+        "editor.formatOnSave": true,
+        "editor.parameterHints.enabled": true
+    },
+
+    // ────────── 런치 구성 ──────────
+    "launch": {
+        "configurations": []
+    }
+}
